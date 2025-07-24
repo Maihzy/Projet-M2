@@ -23,7 +23,6 @@ ENV/
 # Données temporaires et modèles
 uploads/
 DATA/*.csv
-DATA/*.parquet
 DATA/raw/
 DATA/*.pkl  
 DATA/*
@@ -45,7 +44,6 @@ Thumbs.db
 # Test outputs
 .pytest_cache/
 .tox/
-tests/
 .cache/
 .coverage
 htmlcov/
