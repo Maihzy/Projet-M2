@@ -9,14 +9,14 @@ Solution IA pour l’analyse de risque crédit, avec pipeline complet et interfa
 - **Traitement de nouveaux fichiers** : upload CSV, analyse automatique.
 - **Chatbot** : interface web pour dialoguer avec le modèle et obtenir des explications.
 - **Industrialisation** : structure modulaire, Docker, gestion des dépendances.
-- **Sécurité & RGPD** : contrôle des entrées, gestion des secrets, anonymisation des données.
+- **Sécurité & RGPD** : contrôle des entrées, gestion des secrets, Logs et traçabilité des données.
 - **API** : backend disponible en Flask ou FastAPI.
 
 ## Installation
 
 ```bash
-git clone <repo>
-cd <repo>
+git clone https://github.com/Maihzy/Projet-M2.git
+cd Projet-M2
 python -m venv .venv
 source .venv/bin/activate  # (ou .venv\Scripts\activate sous Windows)
 pip install -r requirements.txt
