@@ -1,0 +1,69 @@
+# Crédit pour Tous AI
+
+Solution IA pour l’analyse de risque crédit, avec pipeline complet et interface chatbot
+
+## Fonctionnalités principales
+
+- **Pipeline IA** : ingestion, nettoyage, feature engineering, entraînement, évaluation, export du modèle.
+- **Comparaison de modèles** : plusieurs algorithmes testés, choix justifié selon les métriques.
+- **Traitement de nouveaux fichiers** : upload CSV, analyse automatique.
+- **Chatbot** : interface web pour dialoguer avec le modèle et obtenir des explications.
+- **Industrialisation** : structure modulaire, Docker, gestion des dépendances.
+- **Sécurité & RGPD** : contrôle des entrées, gestion des secrets, anonymisation des données.
+- **API** : backend disponible en Flask ou FastAPI.
+
+## Installation
+
+```bash
+git clone <repo>
+cd <repo>
+python -m venv .venv
+source .venv/bin/activate  # (ou .venv\Scripts\activate sous Windows)
+pip install -r requirements.txt
+```
+
+## Lancement
+
+### Avec Flask
+
+```bash
+python Applications/app.py
+```
+Accédez à l’interface sur [http://127.0.0.1:5000](http://127.0.0.1:5000)
+
+### Avec FastAPI
+
+```bash
+uvicorn Applications/app_fastapi:app --reload
+```
+Accédez à la documentation interactive sur [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+
+## Structure
+
+- `Applications/app.py` : backend Flask + chatbot
+- `Applications/app_fastapi.py` : backend FastAPI (optionnel)
+- `WEB/templates/index.html` : interface utilisateur
+- `modules/` : pipeline data & modèle
+- `DATA/` : fichiers de données et modèles
+- `notebooks/` : exploration et comparaison de modèles
+
+## Usage
+
+1. Importez un fichier CSV client.
+2. Analysez un client ou le portefeuille via le chatbot.
+3. Téléchargez le fichier annoté.
+
+## Tests
+
+```bash
+pytest
+```
+
+## Déploiement
+
+- Dockerfile fourni pour conteneurisation.
+- Variables sensibles dans `.env`.
+
+## Auteur
+
+Projet MSPR IA – 2025

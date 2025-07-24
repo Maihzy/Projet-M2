@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.log
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Environnements virtuels
+.venv/
+env/
+venv/
+ENV/
+
+# Données temporaires et modèles
+uploads/
+DATA/*.csv
+DATA/*.parquet
+DATA/raw/
+DATA/*.pkl  
+DATA/*
+!DATA/models/
+!DATA/models/**
+
+# Secrets et variables d'environnement
+.env
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+.AppleDouble
+.LSOverride
+
+# Test outputs
+.pytest_cache/
+.tox/
+tests/
+.cache/
+.coverage
+htmlcov/
+.idea/
+*.nbconvert.*
+*.pdf
+*~
+*.bak
+
+# Vim
+*.swp
+*.swo
+
+main_dev.py
+poetry.lock
+Pipfile.lock
+
+desktop.ini
+
+Data_viz/

@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Crédit pour Tous</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Inter:600,700|Source+Sans+3:400,500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0B2C4A;
+      --secondary: #1F6F8B;
+      --accent: #C9A227;
+      --neutral-light: #F5F7FA;
+      --neutral-dark: #1A1A1A;
+      --radius: 16px;
+      --radius-btn: 10px;
+      --shadow: 0 6px 18px rgba(0,0,0,.08);
+      --max-width: 900px;
+      --chatbot-width: 400px;
+      --tab-active: #0B2C4A;
+      --tab-inactive: #1F6F8B;
+      --tab-underline: #C9A227;
+    }
+    body {
+      font-family: 'Source Sans 3', Arial, sans-serif;
+      background: var(--neutral-light);
+      color: var(--neutral-dark);
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      font-size: 16px;
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      height: 80px;
+      box-shadow: 0 4px 16px rgba(0,0,0,.08);
+      border-bottom: 1px solid #E0E6EA;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 32px;
+    }
+    .logo {
+      height: 1000px;
+      max-height: 72px;
+      margin-right: 16px;
+      vertical-align: middle;
+      filter: invert(1) brightness(2);
+    }
+    .title {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 2.2rem;
+      letter-spacing: -1px;
+      vertical-align: middle;
+    }
+    main {
+      max-width: var(--max-width);
+      margin: 32px auto 0 auto;
+      padding: 0 16px;
+      flex: 1;
+    }
+    .tabs {
+      position: relative;
+      display: flex;
+      gap: 32px;
+      border-bottom: 1px solid #1F6F8B;
+      margin-bottom: 32px;
+      font-family: 'Inter', sans-serif;
+      font-size: 1.15rem;
+    }
+    .tabs button {
+      position: relative;
+      padding: 12px 0;
+      background: none;
+      border: none;
+      font: 600 18px/1 'Inter', sans-serif;
+      color: #1F6F8B;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      outline: none;
+    }
+    .tabs button[aria-selected="true"] {
+      color: #0B2C4A;
+    }
+    .tabs button[aria-selected="true"]::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      height: 3px;
+      width: 100%;
+      background: #C9A227;
+      border-radius: 2px;
+      transition: width .2s ease;
+      z-index: 2;
+    }
+    .tabs button:hover:not([aria-selected="true"]) {
+      background: #F5F7FA;
+      color: #0B2C4A;
+    }
+    .tabs button:focus-visible {
+      outline: 2px solid #C9A227;
+      outline-offset: 4px;
+    }
+    .tabs button:focus {
+      outline: none;
+      box-shadow: none;
+    }
+    .tabpanel {
+      background: #fff;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px 32px;
+      border: 1px solid #E0E6EA;
+      margin-bottom: 32px;
+      min-height: 220px;
+    }
+    h2 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      font-size: 2rem;
+      margin-bottom: 32px;
+      color: var(--primary);
+    }
+    h3 {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 1.375rem;
+      margin-bottom: 24px;
+      color: var(--secondary);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2,1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 1rem;
+      color: var(--primary);
+    }
+    .input-group {
+      position: relative;
+      width: 100%;
+    }
+    .input-group input {
+      width: 100%;
+      padding: 12px 40px 12px 12px;
+      border-radius: var(--radius-btn);
+      border: 1px solid #E0E6EA;
+      font-size: 1rem;
+      outline: none;
+      box-sizing: border-box;
+      background: var(--neutral-light);
+      color: var(--neutral-dark);
+    }
+    .input-group input:focus {
+      outline: 2px solid var(--accent);
+      border-color: var(--accent);
+    }
+    .input-suffix {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 1rem;
+      pointer-events: none;
+    }
+    .primary-btn {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-btn);
+      padding: 14px 28px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-top: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+    .primary-btn:hover, .primary-btn:focus {
+      background: #08213a;
+      outline: 2px solid var(--accent);
+    }
+    /* --- Mini Chatbot Widget --- */
+    .chatbot-widget, #chat-fab {
+      position: fixed;
+      right: 32px;
+      bottom: 40px;
+      width: 56px;
+      height: 56px;
+      background: #0B2C4A;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      box-shadow: 0 6px 16px rgba(0,0,0,.18);
+      cursor: pointer;
+      z-index: 1100;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s, box-shadow .15s;
+    }
+    .chatbot-widget:hover, #chat-fab:hover {
+      transform: scale(1.06);
+      box-shadow: 0 8px 24px rgba(0,0,0,.24);
+    }
+    .chatbot-widget:focus-visible, #chat-fab:focus-visible {
+      outline: 2px solid #C9A227;
+      outline-offset: 2px;
+    }
+    .chatbot-widget.hidden, #chat-fab.hidden {
+      display: none;
+    }
+    #chatbot-panel {
+      position: fixed;
+      right: 32px;
+      bottom: 96px;
+      width: 360px;
+      max-width: 95vw;
+      height: 520px;
+      background: #fff;
+      box-shadow: 0 8px 32px rgba(11,44,74,.18);
+      border-radius: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(40px) scale(0.98);
+      transition: transform .22s cubic-bezier(.77,.2,.05,1), opacity .18s;
+    }
+    #chatbot-panel.open {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0) scale(1);
+    }
+    #chatbot-header {
+      height: 56px;
+      background: #0B2C4A;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 18px;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 2px 8px rgba(11,44,74,.08);
+    }
+    #chatbot-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px;
+      background: #fff;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+    .bubble-user {
+      background: #1F6F8B;
+      color: #fff;
+      border-radius: 12px 12px 4px 12px;
+      padding: 10px 16px;
+      margin: 12px 0 12px 60px;
+      max-width: 80%;
+      align-self: flex-end;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(31,111,139,.10);
+      text-align: right;
+      word-break: break-word;
+      font-size: 1rem;
+    }
+    .bubble-riskia {
+      background: #F5F7FA;
+      color: #1A1A1A;
+      border-radius: 12px 12px 12px 4px;
+      padding: 10px 16px;
+      margin: 12px 60px 12px 0;
+      max-width: 80%;
+      align-self: flex-start;
+      font-weight: 500;
+      box-shadow: 0 2px 8px rgba(31,111,139,.10);
+      text-align: left;
+      word-break: break-word;
+      font-size: 1rem;
+    }
+    #chatbot-footer {
+      height: 64px;
+      border-top: 1px solid #E0E6EA;
+      display: flex;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #F5F7FA;
+      align-items: center;
+      border-radius: 0 0 20px 20px;
+    }
+    #chatbot-footer input {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid #E0E6EA;
+      font-size: 1rem;
+      outline: none;
+      background: #fff;
+      transition: border-color .15s, outline .15s;
+    }
+    #chatbot-footer input:focus {
+      outline: 2px solid #C9A227;
+      border-color: #C9A227;
+    }
+    #chatbot-footer button {
+      background: #C9A227;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.18s;
+      box-shadow: 0 2px 8px rgba(201,162,39,.08);
+    }
+    #chatbot-footer button:hover, #chatbot-footer button:focus {
+      background: #B28D1F;
+      outline: 2px solid #0B2C4A;
+    }
+    footer {
+      background: #F5F7FA;
+      border-top: 1px solid #E0E6EA;
+      padding: 24px 0;
+      font-size: 14px;
+      color: #1A1A1A;
+      width: 100%;
+      margin-top: 64px;
+      text-align: center;
+    }
+    .chatbot-widget img,
+    #chat-fab img {
+      filter: brightness(0) invert(1);
+    }
+    .select-like {
+      width: 100%;
+      height: 44px;
+      padding: 10px 40px 10px 12px;
+      border: 1px solid #E0E6EA;
+      border-radius: 10px;
+      background: #fff;
+      font-family: 'Source Sans 3', Arial, sans-serif;
+      font-size: 16px;
+      color: #1A1A1A;
+      appearance: none;
+      background-image: url('/WEB/static/icons/chevron-down.svg');
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      box-sizing: border-box;
+      transition: border-color .15s;
+    }
+    .select-like:focus-visible {
+      outline: 2px solid #C9A227;
+      outline-offset: 2px;
+      border-color: #C9A227;
+    }
+    .select-like:hover {
+      border-color: #C5CCD1;
+    }
+    .select-like option[value=""] {
+      color: #9CA3AF;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="/static/logo.svg" alt="Logo Crédit pour Tous" class="logo" height="64">
+    <span class="title">Crédit pour Tous</span>
+  </header>
+  <main>
+    <nav class="tabs" role="tablist" aria-label="Onglets">
+      <button class="tab" id="tab-sim" role="tab" aria-selected="true" aria-controls="panel-sim" tabindex="0">Simulation</button>
+      <button class="tab" id="tab-analyse" role="tab" aria-selected="false" aria-controls="panel-analyse" tabindex="-1">Analyse clients</button>
+      <button class="tab" id="tab-aide" role="tab" aria-selected="false" aria-controls="panel-aide" tabindex="-1">Aide</button>
+    </nav>
+    <section id="panel-sim" class="tabpanel" role="tabpanel" aria-labelledby="tab-sim">
+      <h2> Risque client : calcul et acceptation </h2>
+      <form id="simulation-form" autocomplete="off">
+        <div class="form-grid">
+          <div>
+            <label for="dti">Taux d’endettement (% revenus)</label>
+            <div class="input-group">
+              <input type="number" step="0.01" min="0" max="100" name="dti" id="dti" required>
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+          <div>
+            <label for="annual_inc">Revenus annuels (€)</label>
+            <div class="input-group">
+              <input type="number" step="100" min="0" name="annual_inc" id="annual_inc" required>
+              <span class="input-suffix">€</span>
+            </div>
+          </div>
+          <div>
+            <label for="loan_amnt">Montant du prêt (€)</label>
+            <div class="input-group">
+              <input type="number" step="100" min="0" name="loan_amnt" id="loan_amnt" required>
+              <span class="input-suffix">€</span>
+            </div>
+          </div>
+          <div>
+            <label for="int_rate">Taux d’intérêt annuel (%)</label>
+            <div class="input-group">
+              <input type="number" step="0.01" min="0" max="100" name="int_rate" id="int_rate" required>
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+          <div>
+            <label for="revol_util">Utilisation crédit (%)</label>
+            <div class="input-group">
+              <input type="number" step="0.01" min="0" max="100" name="revol_util" id="revol_util" required>
+              <span class="input-suffix">%</span>
+            </div>
+          </div>
+        </div>
+        <button type="button" id="toggle-advanced" class="primary-btn" style="margin-bottom:16px;background:var(--accent);color:#0B2C4A;">Critères avancés ▼</button>
+        <div id="advanced-fields" style="display:none; margin-bottom:16px;">
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="sub_grade_encoded"> Note de crédit interne</label>
+            <div class="input-group adv-group" data-field="sub_grade_encoded" style="display:none;">
+              <input type="number" step="1" min="1" max="35" name="sub_grade_encoded" id="sub_grade_encoded">
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="term_encoded"> Durée du prêt (mois)</label>
+            <div class="input-group adv-group" data-field="term_encoded" style="display:none;">
+              <input type="number" step="12" min="12" max="60" name="term_encoded" id="term_encoded">
+              <span class="input-suffix">mois</span>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="mort_acc"> Nombre de prêts immobiliers actifs</label>
+            <div class="input-group adv-group" data-field="mort_acc" style="display:none;">
+              <input type="number" step="1" min="0" max="20" name="mort_acc" id="mort_acc">
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="revol_bal"> Encours crédit renouvelable (€)</label>
+            <div class="input-group adv-group" data-field="revol_bal" style="display:none;">
+              <input type="number" step="100" min="0" max="100000" name="revol_bal" id="revol_bal" placeholder="Encours crédit renouvelable (€)">
+              <span class="input-suffix">€</span>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="open_acc"> Nombre total de comptes actifs</label>
+            <div class="input-group adv-group" data-field="open_acc" style="display:none;">
+              <input type="number" step="1" min="0" max="30" name="open_acc" id="open_acc">
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="employment_length_category_Unknown"> Ancienneté d’emploi inconnue (Oui/Non)</label>
+            <div class="input-group adv-group" data-field="employment_length_category_Unknown" style="display:none;">
+              <select name="employment_length_category_Unknown" id="employment_length_category_Unknown" class="select-like" aria-label="Ancienneté d’emploi inconnue">
+                <option value="">–</option>
+                <option value="1">Oui</option>
+                <option value="0">Non</option>
+              </select>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="credit_history_months"> Historique de crédit (mois)</label>
+            <div class="input-group adv-group" data-field="credit_history_months" style="display:none;">
+              <input type="number" step="1" min="0" max="240" name="credit_history_months" id="credit_history_months">
+              <span class="input-suffix">mois</span>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="total_acc"> Nombre total de comptes (actifs + fermés)</label>
+            <div class="input-group adv-group" data-field="total_acc" style="display:none;">
+              <input type="number" step="1" min="0" max="50" name="total_acc" id="total_acc">
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="installment"> Montant de la mensualité (€)</label>
+            <div class="input-group adv-group" data-field="installment" style="display:none;">
+              <input type="number" step="1" min="0" max="5000" name="installment" id="installment">
+              <span class="input-suffix">€</span>
+            </div>
+          </div>
+          <div style="margin-bottom:8px;">
+            <label><input type="checkbox" class="adv-toggle" data-field="home_ownership_RENT"> Statut de logement (Propriétaire/Locataire)</label>
+            <div class="input-group adv-group" data-field="home_ownership_RENT" style="display:none;">
+              <select name="home_ownership_RENT" id="home_ownership_RENT" class="select-like" aria-label="Statut de logement">
+                <option value="">–</option>
+                <option value="1">Locataire</option>
+                <option value="0">Propriétaire</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="primary-btn">Lancer la simulation</button>
+      </form>
+      <div id="simulation-result" style="margin-top:32px;"></div>
+    </section>
+    <section id="panel-analyse" class="tabpanel" role="tabpanel" aria-labelledby="tab-analyse" hidden>
+      <h2>Scores et décisions pour votre fichier clients</h2>
+      <form id="import-form" enctype="multipart/form-data" autocomplete="off">
+        <div class="form-grid">
+          <div>
+            <label for="csv_file">Fichier CSV</label>
+            <div class="input-group">
+              <input type="file" name="csv_file" id="csv_file" accept=".csv" required>
+            </div>
+          </div>
+        </div>
+        <button type="submit" class="primary-btn" style="margin-top:16px;">Importer les données</button>
+      </form>
+      <div id="dashboard-result" style="margin-top:32px;"></div>
+    </section>
+    <section id="panel-aide" class="tabpanel" role="tabpanel" aria-labelledby="tab-aide" hidden>
+      <h2>Centre d'Aide</h2>
+      <p>Cette section est dédiée à l'aide et au support.</p>
+      <ul>
+        <li>Comment utiliser la simulation : remplissez les champs et cliquez sur "Lancer la simulation"</li>
+        <li>Analyse clients : importez un fichier CSV pour obtenir un rapport détaillé</li>
+        <li>Le chatbot RiskAI répond à vos questions sur le crédit et l'analyse</li>
+        <li>Pour toute question technique, contactez le support via le formulaire ou le chatbot</li>
+        <li>Respect de la confidentialité : aucune donnée personnelle n'est conservée</li>
+      </ul>
+      <p><strong>Accessibilité :</strong> Navigation clavier, contraste renforcé, labels explicites.</p>
+    </section>
+  </main>
+
+  <!-- Chatbot Widget + Panel -->
+  <button id="chat-fab"
+    aria-label="Ouvrir le widget de chat RiskAI"
+    class="chatbot-widget"
+    type="button">
+    <img src="/static/logo_chatbot.svg" alt="Logo RiskAI" style="width:32px;height:32px;">
+  </button>
+
+  <aside id="chatbot-panel" aria-hidden="true" aria-label="Chatbot RiskAI" role="dialog">
+    <div id="chatbot-header">
+      <span class="chatbot-title">RiskAI – Assistant Crédit</span>
+      <button id="chatbot-close" aria-label="Fermer le chat" type="button"
+        style="background:none;border:none;color:#fff;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;border-radius:50%;">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div id="chatbot-body" aria-live="polite">
+      <div class="bubble-riskia">Bonjour, je suis RiskAI. Posez-moi une question ou demandez une analyse !</div>
+    </div>
+    <form id="chatbot-footer" autocomplete="off" onsubmit="sendChat(event)">
+      <input type="text" id="chatbot-input" placeholder="Votre question..." aria-label="Votre question" required>
+      <button type="submit" id="chatbot-send">Envoyer</button>
+    </form>
+  </aside>
+
+  <footer>
+    © Crédit pour Tous | <a href="#">Mentions légales</a> | <a href="#">RGPD</a> | <a href="#">Accessibilité</a>
+  </footer>
+
+  <script>
+    // Onglets ARIA + navigation clavier
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.tabpanel');
+    let tabIndex = 0;
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => activateTab(i));
+      tab.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') activateTab((i + 1) % tabs.length);
+        if (e.key === 'ArrowLeft') activateTab((i - 1 + tabs.length) % tabs.length);
+        if (e.key === 'Home') activateTab(0);
+        if (e.key === 'End') activateTab(tabs.length - 1);
+      });
+    });
+    function activateTab(i) {
+      tabs.forEach((tab, j) => {
+        tab.setAttribute('aria-selected', i === j ? 'true' : 'false');
+        tab.setAttribute('tabindex', i === j ? '0' : '-1');
+      });
+      panels.forEach((panel, j) => {
+        panel.hidden = i !== j;
+      });
+      tabs[i].focus();
+      tabIndex = i;
+    }
+
+    // Ouverture/Fermeture du chatbot via le FAB
+    const chatbotPanel = document.getElementById('chatbot-panel');
+    const chatFab = document.getElementById('chat-fab');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotInput = document.getElementById('chatbot-input');
+
+    // Ouvre le chat
+    function openChat() {
+      chatbotPanel.classList.add('open');
+      chatbotPanel.setAttribute('aria-hidden', 'false');
+      chatFab.classList.add('hidden');
+      setTimeout(() => chatbotInput.focus(), 200);
+    }
+
+    // Ferme le chat
+    function closeChat() {
+      chatbotPanel.classList.remove('open');
+      chatbotPanel.setAttribute('aria-hidden', 'true');
+      chatFab.classList.remove('hidden');
+      chatFab.focus();
+    }
+
+    // Toggle via bulle et bouton ✕
+    chatFab.addEventListener('click', openChat);
+    chatbotClose.addEventListener('click', closeChat);
+
+    // ESC pour fermer
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && chatbotPanel.classList.contains('open')) {
+        closeChat();
+      }
+    });
+
+    // Clic en dehors pour fermer
+    document.addEventListener('mousedown', (e) => {
+      if (
+        chatbotPanel.classList.contains('open') &&
+        !chatbotPanel.contains(e.target) &&
+        !chatFab.contains(e.target)
+      ) {
+        closeChat();
+      }
+    });
+
+    // Chatbot interaction (API call)
+    async function sendChat(e) {
+      e.preventDefault();
+      const input = document.getElementById('chatbot-input');
+      const body = document.getElementById('chatbot-body');
+      const msg = input.value;
+      body.innerHTML += `<div class="bubble-user"><strong>Vous :</strong> ${msg}</div>`;
+      input.value = '';
+      // Appel API backend Flask
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({message: msg})
+      });
+      const data = await res.json();
+      // Correction ici : utiliser data.response
+      body.innerHTML += `<div class="bubble-riskia"><strong>RiskAI:</strong> ${data.response}</div>`;
+      body.scrollTop = body.scrollHeight;
+    }
+
+    // Simulation form
+    document.getElementById('simulation-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const resultDiv = document.getElementById('simulation-result');
+      const payload = {
+        dti: parseFloat(form.dti.value),
+        annual_inc: parseFloat(form.annual_inc.value),
+        loan_amnt: parseFloat(form.loan_amnt.value),
+        int_rate: parseFloat(form.int_rate.value),
+        revol_util: parseFloat(form.revol_util.value)
+      };
+      // Ajout des variables avancées si cochées et renseignées
+      [
+        "sub_grade_encoded", "term_encoded", "mort_acc", "revol_bal", "open_acc",
+        "employment_length_category_Unknown", "credit_history_months", "total_acc",
+        "installment", "home_ownership_RENT"
+      ].forEach(field => {
+        const cb = form.querySelector('.adv-toggle[data-field="' + field + '"]');
+        const input = form[field];
+        if (cb && cb.checked && input && input.value !== "") {
+          payload[field] = input.type === "number" ? parseFloat(input.value) : input.value;
+        }
+      });
+      resultDiv.innerHTML = '<span style="color:var(--info);">Analyse en cours...</span>';
+      const res = await fetch('/api/predict-simple', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      resultDiv.innerHTML = `
+        <div><strong>Score :</strong> ${data.score}</div>
+        <div><strong>Décision :</strong> ${data.decision}</div>
+        <div><strong>Seuil :</strong> ${data.threshold}</div>
+        <div><strong>Base value :</strong> ${data.base_value}</div>
+        <div><strong>SHAP :</strong> ${data.shap ? data.shap.map(s => `${s.feature} (${s.shap > 0 ? '+' : ''}${s.shap})`).join(', ') : ''}</div>
+      `;
+    };
+
+    // Import form
+    document.getElementById('import-form').onsubmit = async function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const resultDiv = document.getElementById('dashboard-result');
+      const file = form.csv_file.files[0];
+      if (!file) return;
+      resultDiv.innerHTML = '<span style="color:var(--info);">Import en cours...</span>';
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await fetch('/upload', {
+        method: 'POST',
+        body: formData
+      });
+      const data = await res.json();
+      resultDiv.innerHTML = `
+      `;
+    };
+
+    // Accordéon/toggle pour critères avancés
+    document.getElementById('toggle-advanced').onclick = function() {
+      const adv = document.getElementById('advanced-fields');
+      adv.style.display = adv.style.display === 'none' ? 'block' : 'none';
+      this.innerText = adv.style.display === 'none'
+        ? 'Critères avancés ▼'
+        : 'Critères avancés ▲';
+    };
+    // Affichage dynamique des champs avancés
+    document.querySelectorAll('.adv-toggle').forEach(cb => {
+      cb.addEventListener('change', function() {
+        document.querySelector('.adv-group[data-field="' + this.dataset.field + '"]').style.display = this.checked ? 'block' : 'none';
+      });
+    });
+
+    // Remplace "RiskAI – Assistant Crédit" par "RiskAI – Assistant Crédit"
+    document.querySelector('.chatbot-title').textContent = "RiskAI – Assistant Crédit";
+
+    function sendMessage() {
+        const message = document.getElementById('user-input').value;
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({message: message})
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('chat-response').innerText = data.response;
+        });
+    }
+  </script>
+  <div id="chat-response"></div>
+</body>
+</html>
