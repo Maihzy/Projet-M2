@@ -1,0 +1,22 @@
+# Configuration pipeline ML
+data:
+  input_path: "DATA/Classeur1.csv"
+  separator: ";"
+  encoding: "utf-8"
+  
+
+models:
+  benchmark:
+    - lightgbm
+    - random_forest
+    - xgboost
+  
+  final:
+    name: "lightgbm"
+    features: 15
+    threshold: 0.4
+    
+output:
+  model_path: "DATA/models/final_model.pkl"
+  features_path: "DATA/models/final_features.pkl"
+  results_path: "DATA/results/"
