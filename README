@@ -15,8 +15,8 @@ Solution IA pour l’analyse de risque crédit, avec pipeline complet et interfa
 ## Installation
 
 ```bash
-git clone <repo>
-cd <repo>
+git clone https://github.com/Maihzy/Projet-M2.git
+cd Projet-M2
 python -m venv .venv
 source .venv/bin/activate  # (ou .venv\Scripts\activate sous Windows)
 pip install -r requirements.txt
